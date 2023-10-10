@@ -26,9 +26,10 @@ async function run() {
         
         const toysCollection = client.db('AnimalToy').collection('toys')
         const usersCollection = client.db('AnimalToy').collection('users')
+        const toysReviewsCollection = client.db('AnimalToy').collection('toysReviews')
         // const enrollCollection = client.db('Decabo').collection('enroll')
         // const enrollDeleteCollection = client.db('Decabo').collection('enroll')
-        // const courseCommentCollection = client.db('Decabo').collection('courseComment')
+        // const toysReviewsCollection = client.db('Decabo').collection('courseComment')
 
         // const serchCollection = client.db('Decabo').collection('course')
         // app.get('/getcourseId/:id')
@@ -102,39 +103,39 @@ async function run() {
             console.log(result);
             res.send(result)
         })
-        //comments api
-        // app.post("/comments", async (req, res) => {
-        //     const doc = req.body;
-        //     const result = await courseCommentCollection.insertOne(doc);
-        //     res.send(result);
-        // });
-        // app.get("/comments", async (req, res) => {
-        //     const result = await courseCommentCollection.find().toArray();
-        //     res.send(result);
-        // });
-        // app.get('/comments/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const result = await courseCommentCollection.find(id)
-        //     res.send(result)
-        // })
-        // app.put('/comments/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     const item = req.body
-        //     const filter = { _id: new ObjectId(id) };
-        //     const options = { upsert: true }
-        //     const updateDoc = {
-        //         $set: item,
-        //     }
-        //     const result = await courseCommentCollection.updateOne(filter, updateDoc, options)
-        //     // console.log(result);
-        //     res.send(result)
-        // })
-        // app.delete("/comments/:id", async (req, res) => {
-        //     const id = req.params.id;
-        //     const query = { _id: new ObjectId(id) };
-        //     const result = await courseCommentCollection.deleteOne(query);
-        //     res.send(result);
-        // });
+        // reviews api
+        app.post("/reviews", async (req, res) => {
+            const doc = req.body;
+            const result = await toysReviewsCollection.insertOne(doc);
+            res.send(result);
+        });
+        app.get("/reviews", async (req, res) => {
+            const result = await toysReviewsCollection.find().toArray();
+            res.send(result);
+        });
+        app.get('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const result = await toysReviewsCollection.find(id)
+            res.send(result)
+        })
+        app.put('/reviews/:id', async (req, res) => {
+            const id = req.params.id;
+            const item = req.body
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true }
+            const updateDoc = {
+                $set: item,
+            }
+            const result = await toysReviewsCollection.updateOne(filter, updateDoc, options)
+            // console.log(result);
+            res.send(result)
+        })
+        app.delete("/reviews/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await toysReviewsCollection.deleteOne(query);
+            res.send(result);
+        });
         // //  Enrolled Course api
         // app.get('/enroll/:id', async (req, res) => {
         //     const id = req.params.id;
