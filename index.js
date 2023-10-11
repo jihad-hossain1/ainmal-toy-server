@@ -27,7 +27,7 @@ async function run() {
         const toysCollection = client.db('AnimalToy').collection('toys')
         const usersCollection = client.db('AnimalToy').collection('users')
         const toysReviewsCollection = client.db('AnimalToy').collection('toysReviews')
-        const cartsCollection = client.db('Decabo').collection('carts')
+        const cartsCollection = client.db('AnimalToy').collection('carts')
         // const cartsDeleteCollection = client.db('Decabo').collection('carts')
         // const toysReviewsCollection = client.db('Decabo').collection('courseComment')
 
@@ -50,6 +50,14 @@ async function run() {
         //     res.send(result);
         // });
          // user api
+         app.delete("/carts/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            console.log(query);
+            const result = await cartsCollection.deleteOne(query);
+            console.log(result);
+            res.send(result);
+        });
          app.put('/users/:email', async (req, res) => {
             const email = req.params.email;
             const user = req.body
@@ -177,22 +185,17 @@ async function run() {
             const result = await cartsCollection.find().toArray();
             res.send(result);
         });
-        app.delete("/cart/:id", async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) };
-            const result = await cartsDeleteCollection.deleteOne(query);
-            console.log(result);
-            res.send(result);
-        });
-        app.get('/carts_by_user_email', async (req, res) => {
-            let query = {};
-            if (req.query?.email) {
-                query = { email: req.query.email }
-            }
-            const result = await cartsCollection.find(query).toArray();
-            res.send(result)
-        })
-        app.get("/carts_user", async (req, res) => {
+        
+        // app.get('/carts', async (req, res) => {
+        //     let query = {};
+        //     if (req.query?.email) {
+        //         query = { email: req.query.email }
+        //     }
+        //     const result = await cartsCollection.find(query).toArray();
+        //     res.send(result)
+        // })
+      
+        app.get("/carts", async (req, res) => {
             const email = req.query.email;
             const query = { email: email };
             const result = await cartsCollection.find(query).toArray();
