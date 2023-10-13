@@ -181,7 +181,7 @@ async function run() {
             const result = await cartsCollection.insertOne(doc);
             res.send(result);
         });
-        app.get("/carts", async (req, res) => {
+        app.get("/allcarts", async (req, res) => {
             const result = await cartsCollection.find().toArray();
             res.send(result);
         });
