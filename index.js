@@ -27,28 +27,9 @@ async function run() {
         const toysCollection = client.db('AnimalToy').collection('toys')
         const usersCollection = client.db('AnimalToy').collection('users')
         const toysReviewsCollection = client.db('AnimalToy').collection('toysReviews')
+        const whitelistCollection = client.db('AnimalToy').collection('whitelist')
         const cartsCollection = client.db('AnimalToy').collection('carts')
-        // const cartsDeleteCollection = client.db('Decabo').collection('carts')
-        // const toysReviewsCollection = client.db('Decabo').collection('courseComment')
-
-        // const serchCollection = client.db('Decabo').collection('course')
-        // app.get('/getcourseId/:id')
-
-        // const indexKeys = { title: 1, category: 1 };
-        // const indexOptions = { category: "titleCategory" };
-        // app.get("/getcourseText/:text", async (req, res) => {
-        //     const text = req.params.text;
-        //     const result = await serchCollection
-        //         .find({
-        //             $or: [
-        //                 { title: { $regex: text, $options: "i" } },
-        //                 { category: { $regex: text, $options: "i" } },
-        //                 { date: { $regex: text, $options: "i" } },
-        //             ],
-        //         })
-        //         .toArray();
-        //     res.send(result);
-        // });
+       
          // user api
          app.delete("/carts/:id", async (req, res) => {
             const id = req.params.id;
@@ -169,6 +150,25 @@ async function run() {
             const result = await toysReviewsCollection.deleteOne(query);
             res.send(result);
         });
+
+        //whitelist api
+        app.delete("/whitelist/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await whitelistCollection.deleteOne(query);
+            res.send(result);
+        });
+        app.post("/whitelist", async (req, res) => {
+            const doc = req.body;
+            const result = await whitelistCollection.insertOne(doc);
+            res.send(result);
+        });
+        app.get("/whitelist", async (req, res) => {
+            const email = req.query.email;
+            const query = { email: email };
+            const result = await whitelistCollection.find(query).toArray();
+            res.send(result);
+        });
         // //  carts api
         app.get('/carts/:id', async (req, res) => {
             const id = req.params.id;
@@ -185,12 +185,7 @@ async function run() {
             const result = await cartsCollection.find().toArray();
             res.send(result);
         });
-         app.delete("/carts/:id", async (req, res) => {
-            const id = req.params.id;
-            const query = { _id: new ObjectId(id) };
-            const result = await cartsCollection.deleteOne(query);
-            res.send(result);
-        });
+         
         // app.get('/carts', async (req, res) => {
         //     let query = {};
         //     if (req.query?.email) {
@@ -204,6 +199,12 @@ async function run() {
             const email = req.query.email;
             const query = { email: email };
             const result = await cartsCollection.find(query).toArray();
+            res.send(result);
+        });
+        app.delete("/carts/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await cartsCollection.deleteOne(query);
             res.send(result);
         });
         await client.db("admin").command({ ping: 1 });
